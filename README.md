@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MediCare — Hospital Management Website
 
 A full-stack Hospital Management System built with **React (Vite)**, **Django REST Framework**,
@@ -156,3 +157,6 @@ profile), Services, and Emergency Contacts so the site has content to display.
 Master Guide. When extending a section (e.g. adding a new page or model), prompt your AI
 assistant with the specific file's purpose, expected behavior, and how it should integrate with
 the existing services/contexts shown here for consistent, maintainable results.
+=======
+# hospital-website
+>>>>>>> 88329a3e8dcfcf21a4c1267c7c423bea6e2406ba
