@@ -153,7 +153,7 @@ profile), Services, and Emergency Contacts so the site has content to display.
 
 ---
 
-#Note on AI-assisted development:** Each folder above maps directly to a phase in the original
+Note on AI-assisted development:** Each folder above maps directly to a phase in the original
 Master Guide. When extending a section (e.g. adding a new page or model), prompt your AI
 assistant with the specific file's purpose, expected behavior, and how it should integrate with
 the existing services/contexts shown here for consistent, maintainable results.
