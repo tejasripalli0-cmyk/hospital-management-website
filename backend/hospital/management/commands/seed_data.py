@@ -19,10 +19,10 @@ class Command(BaseCommand):
 
         # ------------------------------------------------------------------
         # SECTION 1: DEPARTMENTS
-        # Each department has a name, slug, professional description and a
-        # unique icon name. update_or_create() is used so that existing
-        # records (e.g. ones seeded earlier with icon="hospital") are
-        # corrected automatically instead of being left stale.
+        # Each department has a name, slug, professional description and an
+        # actual icon SYMBOL (emoji/unicode) stored directly in the icon
+        # field. update_or_create() ensures existing rows (e.g. any old
+        # icon="hospital" placeholder) are corrected on every run.
         # ------------------------------------------------------------------
         departments = [
             (
@@ -30,105 +30,105 @@ class Command(BaseCommand):
                 "cardiology",
                 "Diagnosis and treatment of heart diseases including ECG, "
                 "angiography and cardiac surgery.",
-                "heart",
+                "❤️",
             ),
             (
                 "Neurology",
                 "neurology",
                 "Comprehensive care for brain, spinal cord and nervous "
                 "system disorders.",
-                "brain",
+                "🧠",
             ),
             (
                 "Orthopedics",
                 "orthopedics",
                 "Treatment of bones, joints, ligaments and muscles, "
                 "including fractures and joint replacement.",
-                "bone",
+                "🦴",
             ),
             (
                 "Dermatology",
                 "dermatology",
                 "Diagnosis and treatment of skin, hair and nail conditions "
                 "using modern dermatological care.",
-                "shield",
+                "🧴",
             ),
             (
                 "General Medicine",
                 "general-medicine",
                 "Primary healthcare for adults covering diagnosis, "
                 "treatment and prevention of common illnesses.",
-                "stethoscope",
+                "🩺",
             ),
             (
                 "Gynecology",
                 "gynecology",
                 "Specialized care for women's reproductive health, "
                 "pregnancy and childbirth.",
-                "heart-pulse",
+                "💗",
             ),
             (
                 "Pediatrics",
                 "pediatrics",
                 "Medical care for infants, children and adolescents, "
                 "including growth and vaccination monitoring.",
-                "baby",
+                "👶",
             ),
             (
                 "Ophthalmology",
                 "ophthalmology",
                 "Complete eye care including vision correction, cataract "
                 "and retina treatment.",
-                "eye",
+                "👁️",
             ),
             (
                 "ENT",
                 "ent",
                 "Treatment of ear, nose and throat disorders including "
                 "hearing and sinus problems.",
-                "ear",
+                "👂",
             ),
             (
                 "Psychiatry",
                 "psychiatry",
                 "Mental health evaluation, counselling and treatment for "
                 "emotional and psychological wellbeing.",
-                "brain-circuit",
+                "🧩",
             ),
             (
                 "Pulmonology",
                 "pulmonology",
                 "Diagnosis and management of lung and respiratory tract "
                 "conditions such as asthma and COPD.",
-                "lungs",
+                "🫁",
             ),
             (
                 "Nephrology",
                 "nephrology",
                 "Specialized care for kidney diseases, dialysis and "
                 "related disorders.",
-                "droplets",
+                "💧",
             ),
             (
                 "Radiology",
                 "radiology",
                 "Advanced diagnostic imaging services including X-ray, "
                 "CT and MRI scans.",
-                "scan",
+                "🩻",
             ),
             (
                 "Dentistry",
                 "dentistry",
                 "Complete dental care including cleaning, fillings, "
                 "root canal and orthodontics.",
-                "smile",
+                "🦷",
             ),
             (
                 "Gastroenterology",
                 "gastroenterology",
                 "Diagnosis and treatment of digestive system disorders "
                 "including the stomach, liver and intestines.",
-                "pill",
+                "💊",
             ),
         ]
 
@@ -149,63 +149,79 @@ class Command(BaseCommand):
         # ------------------------------------------------------------------
         # SECTION 2: DOCTORS
         # One doctor per department with realistic Indian names and
-        # professional details. "doctor_icon" is only written if the
-        # Doctor model actually defines that field, since the model does
-        # not contain an ImageField and must not be modified.
+        # professional details. photo_url points to a real portrait photo
+        # (randomuser.me sample photos) and is only written if the Doctor
+        # model actually has that field, so this stays safe even if the
+        # migration from Step 1/2 hasn't been applied yet.
         # ------------------------------------------------------------------
         doctor_field_names = {f.name for f in Doctor._meta.get_fields()}
-        supports_doctor_icon = "doctor_icon" in doctor_field_names
+        supports_photo_url = "photo_url" in doctor_field_names
 
         doctors = [
             ("arjun.sharma", "Arjun", "Sharma", "Cardiology", "Cardiologist",
-             "MBBS, MD (Cardiology)", 12, 800, "stethoscope",
+             "MBBS, MD (Cardiology)", 12, 800,
+             "https://randomuser.me/api/portraits/men/11.jpg",
              "Specialist in interventional cardiology and heart failure management."),
             ("priya.reddy", "Priya", "Reddy", "Neurology", "Neurologist",
-             "MBBS, DM (Neurology)", 10, 900, "user-round",
+             "MBBS, DM (Neurology)", 10, 900,
+             "https://randomuser.me/api/portraits/women/21.jpg",
              "Expert in stroke management and epilepsy treatment."),
             ("rahul.verma", "Rahul", "Verma", "Orthopedics", "Orthopedic Surgeon",
-             "MBBS, MS (Ortho)", 15, 750, "badge-plus",
+             "MBBS, MS (Ortho)", 15, 750,
+             "https://randomuser.me/api/portraits/men/32.jpg",
              "Experienced in joint replacement and sports injury surgery."),
             ("sneha.nair", "Sneha", "Nair", "Dermatology", "Dermatologist",
-             "MBBS, MD (Dermatology)", 8, 600, "user",
+             "MBBS, MD (Dermatology)", 8, 600,
+             "https://randomuser.me/api/portraits/women/43.jpg",
              "Focused on cosmetic dermatology and skin allergy treatment."),
             ("vikram.singh", "Vikram", "Singh", "General Medicine", "General Physician",
-             "MBBS, MD (Medicine)", 14, 500, "stethoscope",
+             "MBBS, MD (Medicine)", 14, 500,
+             "https://randomuser.me/api/portraits/men/54.jpg",
              "Provides comprehensive primary care for chronic and acute illnesses."),
             ("ananya.gupta", "Ananya", "Gupta", "Gynecology", "Gynecologist",
-             "MBBS, MS (OBG)", 11, 700, "user-round",
+             "MBBS, MS (OBG)", 11, 700,
+             "https://randomuser.me/api/portraits/women/65.jpg",
              "Specializes in high-risk pregnancies and laparoscopic surgery."),
             ("kiran.kumar", "Kiran", "Kumar", "Pediatrics", "Pediatrician",
-             "MBBS, MD (Pediatrics)", 9, 550, "baby",
+             "MBBS, MD (Pediatrics)", 9, 550,
+             "https://randomuser.me/api/portraits/men/76.jpg",
              "Dedicated to child healthcare, immunization and nutrition."),
             ("neha.joshi", "Neha", "Joshi", "Ophthalmology", "Eye Specialist",
-             "MBBS, MS (Ophthalmology)", 7, 600, "eye",
+             "MBBS, MS (Ophthalmology)", 7, 600,
+             "https://randomuser.me/api/portraits/women/17.jpg",
              "Skilled in cataract surgery and retinal disease management."),
             ("nikhil.reddy", "Nikhil", "Reddy", "ENT", "ENT Specialist",
-             "MBBS, MS (ENT)", 10, 650, "ear",
+             "MBBS, MS (ENT)", 10, 650,
+             "https://randomuser.me/api/portraits/men/28.jpg",
              "Experienced in sinus surgery and hearing disorder treatment."),
             ("pooja.patel", "Pooja", "Patel", "Psychiatry", "Psychiatrist",
-             "MBBS, MD (Psychiatry)", 6, 700, "brain-circuit",
+             "MBBS, MD (Psychiatry)", 6, 700,
+             "https://randomuser.me/api/portraits/women/39.jpg",
              "Provides counselling and treatment for anxiety, depression and stress disorders."),
             ("rohan.mehta", "Rohan", "Mehta", "Pulmonology", "Pulmonologist",
-             "MBBS, MD (Pulmonology)", 13, 750, "user",
+             "MBBS, MD (Pulmonology)", 13, 750,
+             "https://randomuser.me/api/portraits/men/50.jpg",
              "Specialist in asthma, COPD and sleep-related breathing disorders."),
             ("meera.krishnan", "Meera", "Krishnan", "Nephrology", "Nephrologist",
-             "MBBS, DM (Nephrology)", 12, 850, "droplets",
+             "MBBS, DM (Nephrology)", 12, 850,
+             "https://randomuser.me/api/portraits/women/61.jpg",
              "Expert in dialysis management and chronic kidney disease care."),
             ("kavya.iyer", "Kavya", "Iyer", "Radiology", "Radiologist",
-             "MBBS, MD (Radiology)", 9, 600, "scan",
+             "MBBS, MD (Radiology)", 9, 600,
+             "https://randomuser.me/api/portraits/women/72.jpg",
              "Experienced in diagnostic imaging including CT and MRI interpretation."),
             ("aditya.rao", "Aditya", "Rao", "Gastroenterology", "Gastroenterologist",
-             "MBBS, DM (Gastroenterology)", 11, 800, "user-round",
+             "MBBS, DM (Gastroenterology)", 11, 800,
+             "https://randomuser.me/api/portraits/men/83.jpg",
              "Specializes in endoscopy and treatment of liver and digestive disorders."),
             ("sanjay.kullu", "Sanjay", "Kullu", "Dentistry", "Dental Surgeon",
-             "BDS, MDS", 8, 500, "smile",
+             "BDS, MDS", 8, 500,
+             "https://randomuser.me/api/portraits/men/94.jpg",
              "Focused on restorative dentistry, root canal and orthodontic care."),
         ]
 
-        for i, (username, first, last, dept, spec, qualification,
-                experience, fee, doc_icon, bio) in enumerate(doctors):
+        for (username, first, last, dept, spec, qualification,
+             experience, fee, photo_url, bio) in doctors:
 
             # Create or update the underlying user account.
             user, created = User.objects.update_or_create(
@@ -239,9 +255,10 @@ class Command(BaseCommand):
                 "is_active": True,
             }
 
-            # Only include doctor_icon if the model actually supports it.
-            if supports_doctor_icon:
-                doctor_defaults["doctor_icon"] = doc_icon
+            # Only include photo_url if the model has the field
+            # (i.e. after the migration from Step 1/2 has been applied).
+            if supports_photo_url:
+                doctor_defaults["photo_url"] = photo_url
 
             Doctor.objects.update_or_create(
                 user=user,
@@ -250,8 +267,8 @@ class Command(BaseCommand):
 
         # ------------------------------------------------------------------
         # SECTION 3: SERVICES
-        # One consultation service per department, using the same icon as
-        # its department for visual consistency.
+        # One consultation service per department, reusing the department's
+        # emoji icon for visual consistency.
         # ------------------------------------------------------------------
         for name, slug, description, icon in departments:
             dept = dept_objects[name]
